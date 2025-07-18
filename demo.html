@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PyEvolve - Genetic Algorithm Simulation</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        pre {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        code {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #f5f5f5;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+        .image-container {
+            width: 100%;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .image-container img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .caption {
+            font-style: italic;
+            margin-top: 5px;
+            color: #666;
+        }
+        .highlight {
+            background-color: #fffacd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .button {
+            display: inline-block;
+            background-color: #3498db;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        .button:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
+<body>
+    <h1>PyEvolve: Genetic Algorithm Simulation</h1>
+    
+    <div class="highlight">
+        <h2>What is PyEvolve?</h2>
+        <p>
+            PyEvolve is a simple yet powerful genetic algorithm simulation that demonstrates evolutionary principles through computational modeling. The simulation creates a population of virtual creatures with various attributes (speed, strength, vision, and stamina), evolves them over multiple generations, and visualizes the results.
+        </p>
+        <p>
+            This project is perfect for:
+        </p>
+        <ul>
+            <li>Learning about genetic algorithms and evolutionary computation</li>
+            <li>Experimenting with different fitness functions and selection methods</li>
+            <li>Visualizing how traits evolve over generations</li>
+            <li>Understanding basic principles of natural selection in a computational context</li>
+        </ul>
+    </div>
+
+    <h2>Quick Installation Guide</h2>
+    <ol>
+        <li>Clone the repository:
+            <pre><code>git clone https://github.com/Papaya-Voldemort/Creature-Evolution-Sim.git
+cd Creature-Evolution-Sim</code></pre>
+        </li>
+        <li>Install the required dependencies:
+            <pre><code>pip install -r requirements.txt</code></pre>
+        </li>
+        <li>Run the simulation:
+            <pre><code>python main.py</code></pre>
+        </li>
+    </ol>
+
+    <h2>Example Usage</h2>
+    
+    <h3>Basic Simulation</h3>
+    <p>
+        The default configuration in <code>main.py</code> creates a population of 100 creatures and evolves them over 10 generations:
+    </p>
+    <pre><code>import random
+from helpers import Creature
+from helpers import calculate_offspring, produce_next_generation
+import matplotlib.pyplot as plt
+import os
+
+population_count = 100
+population = []
+generation_goal = 10
+
+# Create initial population
+for i in range(population_count):
+    speed = random.randint(1, 100)
+    strength = random.randint(1, 100)
+    vision = random.randint(1, 100)
+    stamina = random.randint(1, 100)
+    creature = Creature(speed, strength, vision, stamina)
+    population.append(creature)
+
+# Sort by fitness
+population = sorted(population, key=lambda c: c.fitness, reverse=True)
+generations = [population]
+
+# Evolve for multiple generations
+for gen in range(1, generation_goal + 1):
+    survivors = generations[-1][:20]  # top 20 from previous generation
+    next_generation = produce_next_generation(survivors, population_count)
+    next_generation = sorted(next_generation, key=lambda c: c.fitness, reverse=True)
+    generations.append(next_generation)</code></pre>
+
+    <h3>Customizing the Simulation</h3>
+    <p>
+        You can easily modify the simulation parameters:
+    </p>
+    <ul>
+        <li>Change <code>population_count</code> to simulate larger or smaller populations</li>
+        <li>Adjust <code>generation_goal</code> to run for more or fewer generations</li>
+        <li>Modify the selection criteria (currently takes top 20 creatures)</li>
+        <li>Edit the <code>calculate_fitness</code> method in the <code>Creature</code> class to change how fitness is determined</li>
+        <li>Adjust mutation rates in the <code>calculate_offspring</code> function</li>
+    </ul>
+
+    <h2>Visualization Examples</h2>
+    
+    <div class="container">
+        <div class="image-container">
+            <img src="graphs/fitness_trends.png" alt="Fitness trends over generations">
+            <p class="caption">Fitness trends over generations showing average, maximum, and minimum fitness values.</p>
+        </div>
+        
+        <div class="image-container">
+            <img src="graphs/trait_trends.png" alt="Trait evolution over generations">
+            <p class="caption">Evolution of average trait values (speed, strength, vision, stamina) across generations.</p>
+        </div>
+        
+        <div class="image-container">
+            <img src="graphs/last_gen_distribution.png" alt="Trait distribution in final generation">
+            <p class="caption">Distribution of trait values in the final generation.</p>
+        </div>
+    </div>
+
+    <h2>Understanding the Code</h2>
+    
+    <h3>Key Components</h3>
+    <ul>
+        <li><strong>Creature Class</strong>: Represents an individual with four attributes and a fitness calculation</li>
+        <li><strong>calculate_offspring</strong>: Creates new creatures by combining traits from parents with possible mutations</li>
+        <li><strong>produce_next_generation</strong>: Generates a new population from the selected survivors</li>
+    </ul>
+
+    <h3>Fitness Calculation</h3>
+    <p>
+        The default fitness function weights the attributes as follows:
+    </p>
+    <pre><code>def calculate_fitness(self):
+    fitness = (0.3 * self.speed) + (0.3 * self.strength) + (0.2 * self.vision) + (0.2 * self.stamina)
+    return fitness</code></pre>
+
+    <h2>Future Development</h2>
+    <p>
+        Check out the <code>TODO.md</code> file for planned improvements and features. Contributions are welcome!
+    </p>
+
+    <div class="highlight">
+        <h3>Get Started Today!</h3>
+        <p>
+            PyEvolve is a great way to learn about genetic algorithms and evolutionary computation. Clone the repository, run the simulation, and start experimenting with your own modifications!
+        </p>
+        <a href="https://github.com/Papaya-Voldemort/Creature-Evolution-Sim" class="button">View on GitHub</a>
+    </div>
+
+    <footer>
+        <p>PyEvolve - Created on July 17, 2025</p>
+    </footer>
+</body>
+</html>
